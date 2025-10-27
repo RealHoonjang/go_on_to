@@ -124,13 +124,26 @@ function loadAllDataFiles() {
         
         // GitHub Pages 호환 경로 처리
         let filePath;
-        if (window.location.hostname.includes('github.io')) {
+        const hostname = window.location.hostname;
+        const pathname = window.location.pathname;
+        
+        if (hostname.includes('github.io')) {
             // GitHub Pages 환경
-            const repoName = window.location.pathname.split('/')[1] || '';
-            filePath = `/${repoName}/${file}`;
+            // pathname이 /go_on_to/인 경우 -> /go_on_to/data/seoul.json
+            // pathname이 /go_on_to_shcool/인 경우 -> /go_on_to_shcool/data/seoul.json
+            let basePath = pathname.endsWith('/') ? pathname : pathname + '/';
+            
+            // 빈 pathname (/)인 경우 저장소 이름으로 추정
+            if (basePath === '/') {
+                basePath = '/go_on_to_shcool/';
+            }
+            
+            filePath = basePath + file;
+            console.log('GitHub Pages - Base path:', basePath, 'File:', file, 'Full path:', filePath);
         } else {
             // 로컬 환경
             filePath = file;
+            console.log('Local file:', filePath);
         }
         
         fetch(filePath)
