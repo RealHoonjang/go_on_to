@@ -117,26 +117,52 @@ function loadAllDataFiles() {
     ];
 
     let loadedCount = 0;
+    let hasErrors = false;
     
     files.forEach(file => {
         const region = file.split('/')[1].split('.')[0];
         
-        fetch(file)
-            .then(response => response.json())
+        // GitHub Pages 호환 경로 처리
+        let filePath;
+        if (window.location.hostname.includes('github.io')) {
+            // GitHub Pages 환경
+            const repoName = window.location.pathname.split('/')[1] || '';
+            filePath = `/${repoName}/${file}`;
+        } else {
+            // 로컬 환경
+            filePath = file;
+        }
+        
+        fetch(filePath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(jsonData => {
                 allData[region] = processRegionData(jsonData, region);
                 loadedCount++;
                 
                 if (loadedCount === files.length) {
-                    updateStatus('데이터 로드 완료! 종목을 선택하세요.', 'success');
+                    if (hasErrors) {
+                        updateStatus('일부 데이터 로드에 실패했습니다.', 'warning');
+                    } else {
+                        updateStatus('데이터 로드 완료! 종목을 선택하세요.', 'success');
+                    }
                 }
             })
             .catch(error => {
-                console.error(`파일 로드 실패: ${file}`, error);
+                console.error(`파일 로드 실패: ${filePath}`, error);
+                hasErrors = true;
                 loadedCount++;
                 
                 if (loadedCount === files.length) {
-                    updateStatus('일부 데이터 로드에 실패했습니다.', 'warning');
+                    if (hasErrors && Object.keys(allData).length === 0) {
+                        updateStatus('데이터 파일을 찾을 수 없습니다. GitHub 저장소를 확인해주세요.', 'danger');
+                    } else {
+                        updateStatus('일부 데이터 로드에 실패했습니다.', 'warning');
+                    }
                 }
             });
     });
@@ -411,7 +437,9 @@ function loadEventData() {
         cardBody.innerHTML = `
             <div class="row">
                 <div class="col-md-8">
-                    <canvas id="distributionChart" width="400" height="200"></canvas>
+                    <div style="height: 400px;">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div id="statistics-info"></div>
