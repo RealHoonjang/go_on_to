@@ -1,6 +1,6 @@
 /* 기본 스타일 */
 html {
-    font-size: 22px;
+    font-size: 16px;
 }
 
 body {
@@ -14,15 +14,15 @@ body {
 /* 히어로 섹션 */
 .hero-section {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 80px 40px;
+    padding: 50px 30px;
     border-radius: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
 .title-icon {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background: rgba(255,255,255,0.2);
     border-radius: 50%;
     display: inline-flex;
@@ -32,12 +32,12 @@ body {
 }
 
 .title-icon i {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: white;
 }
 
 .hero-title {
-    font-size: 4.5rem;
+    font-size: 3rem;
     font-weight: 800;
     color: white;
     margin: 20px 0;
@@ -46,7 +46,7 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
     color: rgba(255,255,255,0.9);
     font-weight: 300;
     margin-bottom: 0;
@@ -69,13 +69,13 @@ body {
 
 .card-header {
     border: none;
-    padding: 2rem;
+    padding: 1.5rem;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .card-body {
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .card-title {
@@ -87,7 +87,7 @@ body {
 /* 네비게이션 */
 .navbar-brand {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 /* 반응형 디자인 */
@@ -145,14 +145,14 @@ body {
 .btn {
     border-radius: 10px;
     font-weight: 600;
-    font-size: 1.1rem;
-    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
     transition: all 0.3s ease;
 }
 
 .btn-lg {
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
 }
 
 .btn:hover {
@@ -177,10 +177,10 @@ body {
 }
 
 .percentile-display {
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 700;
     text-align: center;
-    margin: 30px 0;
+    margin: 20px 0;
     letter-spacing: -2px;
 }
 
@@ -218,7 +218,7 @@ body {
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #667eea;
     margin-bottom: 0.5rem;
@@ -261,7 +261,8 @@ body {
 }
 
 canvas {
-    max-height: 500px !important;
+    max-height: 450px !important;
+    max-width: 100%;
 }
 
 /* 진행률 바 */
