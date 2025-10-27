@@ -8,45 +8,45 @@ body {
     background: #f8f9fa;
     min-height: 100vh;
     color: #333;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
 }
 
 /* 히어로 섹션 */
 .hero-section {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 50px 30px;
-    border-radius: 20px;
-    margin-bottom: 30px;
+    padding: 30px 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
 .title-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: rgba(255,255,255,0.2);
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .title-icon i {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: white;
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 800;
     color: white;
-    margin: 20px 0;
+    margin: 15px 0;
     letter-spacing: -1px;
     line-height: 1.2;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: rgba(255,255,255,0.9);
     font-weight: 300;
     margin-bottom: 0;
@@ -69,13 +69,13 @@ body {
 
 .card-header {
     border: none;
-    padding: 1.5rem;
+    padding: 1rem;
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .card-title {
@@ -87,7 +87,11 @@ body {
 /* 네비게이션 */
 .navbar-brand {
     font-weight: bold;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+}
+
+.nav-link {
+    font-size: 0.95rem;
 }
 
 /* 반응형 디자인 */
@@ -120,8 +124,8 @@ body {
     border-radius: 10px;
     border: 2px solid #e9ecef;
     transition: all 0.3s ease;
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
 }
 
 .form-control:focus, .form-select:focus {
@@ -130,15 +134,15 @@ body {
 }
 
 .form-label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     color: #333;
 }
 
 .form-select-lg {
-    padding: 1.2rem;
-    font-size: 1.2rem;
+    padding: 0.8rem;
+    font-size: 1rem;
 }
 
 /* 버튼 스타일 */
@@ -177,10 +181,10 @@ body {
 }
 
 .percentile-display {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     text-align: center;
-    margin: 20px 0;
+    margin: 15px 0;
     letter-spacing: -2px;
 }
 
@@ -218,7 +222,7 @@ body {
 }
 
 .stat-value {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: #667eea;
     margin-bottom: 0.5rem;
@@ -282,8 +286,8 @@ canvas {
     border-radius: 10px;
     border: none;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    padding: 1.5rem;
-    font-size: 1.1rem;
+    padding: 1rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
