@@ -385,6 +385,10 @@ function calculatePercentile(sortedValues, percentile) {
     return sorted[lower] * (1 - weight) + sorted[upper] * weight;
 }
 
+// 높을수록 좋은 종목 목록 (낮을수록 좋은 종목: 10m_dash, 20m_dash, long_run)
+const higherIsBetterEvents = ['standing_long_jump', 'vertical_jump', 'grip_strength', 'sit_up', 'medicine_ball_throw', 'front_bend'];
+const lowerIsBetterEvents = ['10m_dash', '20m_dash', 'long_run'];
+
 // 백분위수 계산 (성별 필터 포함) - 이상치 제거 버전과 동일한 데이터 사용
 function calculateScorePercentile(eventName, score, genderFilter = '전체') {
     const allEventData = getAllEventData(eventName, genderFilter);
@@ -411,11 +415,21 @@ function calculateScorePercentile(eventName, score, genderFilter = '전체') {
         return null;
     }
     
-    // 점수보다 낮은 값들의 개수 계산
-    const belowCount = scores.filter(s => s <= score).length;
+    // 종목이 높을수록 좋은지, 낮을수록 좋은지 확인
+    const isHigherBetter = higherIsBetterEvents.includes(eventName);
     
-    // 백분위수 계산: 현재 점수보다 낮거나 같은 점수를 받은 비율
-    const percentile = (belowCount / scores.length) * 100;
+    let lowerCount;
+    
+    if (isHigherBetter) {
+        // 높을수록 좋은 종목: 점수보다 낮은 값들의 개수
+        lowerCount = scores.filter(s => s < score).length;
+    } else {
+        // 낮을수록 좋은 종목: 점수보다 높은 값들의 개수
+        lowerCount = scores.filter(s => s > score).length;
+    }
+    
+    // 백분위수 계산: 하위권 비율
+    const percentile = (lowerCount / scores.length) * 100;
     
     return percentile;
 }
@@ -1114,7 +1128,7 @@ function displayAnalysisResult(data) {
                     <div class="progress mb-2">
                         <div class="progress-bar" style="width: ${100 - percentile}%"></div>
                     </div>
-                    <small>전체 ${data.statistics.count}명 중 상위 ${Math.round(100 - percentile)}%</small>
+                    <small>전체 ${data.statistics.count}명 중 상위 ${Math.round(100 - percentile)}%위</small>
                 </div>
             </div>
             <div class="col-md-6">
@@ -1169,10 +1183,10 @@ function displayAnalysisResult(data) {
 }
 
 // 백분위수에 따른 등급 결정
-// 백분위수: 낮을수록 많은 사람이 나보다 낮은 점수를 받음 (하위권)
-// 상위권/하위권을 명확히 구분하기 위해 역으로 판정
+// 백분위수 = 하위권 비율 (낮을수록 좋음)
+// 상위권 비율로 변환하여 판정
 function getGradeFromPercentile(percentile) {
-    // percentile이 낮을수록 하위권 = 상위권으로 변환
+    // percentile은 하위권 비율이므로 상위권 비율로 변환
     const rankingPercent = 100 - percentile;
     
     if (rankingPercent >= 90) {
