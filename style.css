@@ -97,25 +97,25 @@ body {
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .hero-section {
-        padding: 40px 20px;
-        margin-bottom: 20px;
+        padding: 20px 15px;
+        margin-bottom: 15px;
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
     
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
     
     .title-icon {
-        width: 60px;
-        height: 60px;
+        width: 45px;
+        height: 45px;
     }
     
     .title-icon i {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 }
 
