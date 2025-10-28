@@ -129,17 +129,13 @@ function loadAllDataFiles() {
         
         if (hostname.includes('github.io')) {
             // GitHub Pages 환경
-            // pathname이 /go_on_to/인 경우 -> /go_on_to/data/seoul.json
-            // pathname이 /go_on_to_shcool/인 경우 -> /go_on_to_shcool/data/seoul.json
-            let basePath = pathname.endsWith('/') ? pathname : pathname + '/';
+            // URL이 realhoonjang.github.io/go_on_to/ 인 경우 저장소 이름은 'go_on_to'
+            const pathParts = pathname.split('/').filter(part => part);
+            const repoName = pathParts[0] || 'go_on_to';  // 기본값 설정
             
-            // 빈 pathname (/)인 경우 저장소 이름으로 추정
-            if (basePath === '/') {
-                basePath = '/go_on_to_shcool/';
-            }
-            
-            filePath = basePath + file;
-            console.log('GitHub Pages - Base path:', basePath, 'File:', file, 'Full path:', filePath);
+            filePath = `/${repoName}/${file}`;
+            console.log('GitHub Pages - Repo name:', repoName);
+            console.log('GitHub Pages - Loading:', filePath);
         } else {
             // 로컬 환경
             filePath = file;
@@ -389,7 +385,7 @@ function calculatePercentile(sortedValues, percentile) {
     return sorted[lower] * (1 - weight) + sorted[upper] * weight;
 }
 
-// 백분위수 계산 (성별 필터 포함)
+// 백분위수 계산 (성별 필터 포함) - 이상치 제거 버전과 동일한 데이터 사용
 function calculateScorePercentile(eventName, score, genderFilter = '전체') {
     const allEventData = getAllEventData(eventName, genderFilter);
     
@@ -397,8 +393,28 @@ function calculateScorePercentile(eventName, score, genderFilter = '전체') {
         return null;
     }
     
-    const scores = allEventData.map(item => item.score);
+    // 통계 계산과 동일한 이상치 제거 로직 적용
+    let scores = allEventData.map(item => item.score);
+    
+    // 10m 달리기의 경우 20초 이상인 이상치 제거
+    scores = scores.filter(score => {
+        if (eventName === '10m_dash' && score > 20) {
+            return false;
+        }
+        return true;
+    });
+    
+    // 이상치 제거 적용
+    scores = removeOutliers(scores, eventName);
+    
+    if (scores.length === 0) {
+        return null;
+    }
+    
+    // 점수보다 낮은 값들의 개수 계산
     const belowCount = scores.filter(s => s <= score).length;
+    
+    // 백분위수 계산: 현재 점수보다 낮거나 같은 점수를 받은 비율
     const percentile = (belowCount / scores.length) * 100;
     
     return percentile;
@@ -988,34 +1004,85 @@ function displayPersonalPositionOnChart(score, gender) {
         return;
     }
     
-    // 개인 기록을 차트에 마커로 표시하는 간단한 방법
     const canvas = document.getElementById('distributionChart');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        const chartArea = distributionChart.chartArea;
+    if (!canvas) return;
+    
+    setTimeout(() => {
+        const labels = distributionChart.data.labels;
+        if (!labels || labels.length === 0) return;
         
-        // 차트에 빨간 점선으로 개인 위치 표시
-        setTimeout(() => {
-            ctx.save();
-            ctx.strokeStyle = 'rgb(255, 99, 132)';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([10, 5]);
+        const chartArea = distributionChart.chartArea;
+        if (!chartArea) return;
+        
+        // 라벨을 숫자로 변환
+        const labelValues = labels.map(label => {
+            const num = parseFloat(label.toString().replace(/[^0-9.-]/g, ''));
+            return isNaN(num) ? null : num;
+        }).filter(v => v !== null);
+        
+        if (labelValues.length < 2) return;
+        
+        // bin 크기 계산 (인접 라벨 간의 차이)
+        const binSizes = [];
+        for (let i = 1; i < labelValues.length; i++) {
+            binSizes.push(labelValues[i] - labelValues[i-1]);
+        }
+        const avgBinSize = binSizes.length > 0 ? 
+            binSizes.reduce((a, b) => a + b, 0) / binSizes.length : 5;
+        
+        // 첫 번째 라벨을 min으로 사용
+        const minValue = labelValues[0];
+        
+        // score가 어느 구간에 속하는지 찾기
+        let targetIndex = 0;
+        for (let i = 0; i < labelValues.length; i++) {
+            const binStart = labelValues[i];
+            const binEnd = (i < labelValues.length - 1) ? 
+                labelValues[i + 1] : binStart + avgBinSize;
             
-            const chartWidth = chartArea.right - chartArea.left;
-            const chartHeight = chartArea.bottom - chartArea.top;
-            
-            ctx.beginPath();
-            ctx.moveTo(chartArea.left + chartWidth / 2, chartArea.top);
-            ctx.lineTo(chartArea.left + chartWidth / 2, chartArea.bottom);
-            ctx.stroke();
-            ctx.restore();
-            
-            // 개인 기록 라벨 추가
-            ctx.fillStyle = 'rgb(255, 99, 132)';
-            ctx.font = 'bold 14px Arial';
-            ctx.fillText(`내 기록: ${score}`, chartArea.left + 10, chartArea.top + 20);
-        }, 500);
-    }
+            // 구간 범위 체크 (마지막 구간은 포함)
+            if (i === labelValues.length - 1) {
+                if (score >= binStart && score <= binEnd) {
+                    targetIndex = i;
+                    break;
+                }
+            } else {
+                if (score >= binStart && score < binEnd) {
+                    targetIndex = i;
+                    break;
+                }
+            }
+        }
+        
+        // 차트에서 X 위치 계산
+        const barCount = labels.length;
+        const chartWidth = chartArea.right - chartArea.left;
+        const barWidth = chartWidth / barCount;
+        const xPosition = chartArea.left + barWidth * targetIndex + barWidth / 2;
+        
+        // 개인 기록 마커 그리기
+        const ctx = canvas.getContext('2d');
+        
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 99, 132, 0.8)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([10, 5]);
+        
+        ctx.beginPath();
+        ctx.moveTo(xPosition, chartArea.top);
+        ctx.lineTo(xPosition, chartArea.bottom);
+        ctx.stroke();
+        ctx.restore();
+        
+        // 텍스트 표시
+        ctx.save();
+        ctx.fillStyle = 'rgb(255, 99, 132)';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText(`내 기록: ${score}`, chartArea.left + 10, chartArea.top + 25);
+        ctx.restore();
+        
+    }, 200);
 }
 
 // 분석 결과 표시
@@ -1042,12 +1109,12 @@ function displayAnalysisResult(data) {
             <div class="col-md-6">
                 <div class="result-card">
                     <h5>백분위수</h5>
-                    <div class="percentile-display ${grade.class}">${percentile}%</div>
+                    <div class="percentile-display ${grade.class}">${Math.round(100 - percentile)}%</div>
                     <p class="text-center">${grade.text}</p>
                     <div class="progress mb-2">
-                        <div class="progress-bar" style="width: ${percentile}%"></div>
+                        <div class="progress-bar" style="width: ${100 - percentile}%"></div>
                     </div>
-                    <small>전체 ${data.statistics.count}명 중 상위 ${percentile}%</small>
+                    <small>전체 ${data.statistics.count}명 중 상위 ${Math.round(100 - percentile)}%</small>
                 </div>
             </div>
             <div class="col-md-6">
@@ -1087,11 +1154,11 @@ function displayAnalysisResult(data) {
                 <div class="alert alert-info">
                     <h5><i class="fas fa-lightbulb me-2"></i>분석 결과 해석</h5>
                     <ul class="mb-0">
-                        <li><strong>상위 10% 이하:</strong> 우수한 수준입니다.</li>
-                        <li><strong>상위 25% 이하:</strong> 양호한 수준입니다.</li>
-                        <li><strong>상위 50% 이하:</strong> 평균 수준입니다.</li>
-                        <li><strong>상위 75% 이하:</strong> 개선이 필요합니다.</li>
-                        <li><strong>상위 75% 초과:</strong> 집중적인 훈련이 필요합니다.</li>
+                        <li><strong>상위 90% 이상:</strong> 우수한 수준입니다.</li>
+                        <li><strong>상위 75% 이상:</strong> 양호한 수준입니다.</li>
+                        <li><strong>상위 50% 이상:</strong> 평균 수준입니다.</li>
+                        <li><strong>상위 25% 이상:</strong> 개선이 필요합니다.</li>
+                        <li><strong>상위 25% 미만:</strong> 집중적인 훈련이 필요합니다.</li>
                     </ul>
                 </div>
             </div>
@@ -1102,14 +1169,19 @@ function displayAnalysisResult(data) {
 }
 
 // 백분위수에 따른 등급 결정
+// 백분위수: 낮을수록 많은 사람이 나보다 낮은 점수를 받음 (하위권)
+// 상위권/하위권을 명확히 구분하기 위해 역으로 판정
 function getGradeFromPercentile(percentile) {
-    if (percentile <= 10) {
+    // percentile이 낮을수록 하위권 = 상위권으로 변환
+    const rankingPercent = 100 - percentile;
+    
+    if (rankingPercent >= 90) {
         return { class: 'percentile-excellent', text: '우수' };
-    } else if (percentile <= 25) {
+    } else if (rankingPercent >= 75) {
         return { class: 'percentile-good', text: '양호' };
-    } else if (percentile <= 50) {
+    } else if (rankingPercent >= 50) {
         return { class: 'percentile-average', text: '보통' };
-    } else if (percentile <= 75) {
+    } else if (rankingPercent >= 25) {
         return { class: 'percentile-poor', text: '개선필요' };
     } else {
         return { class: 'percentile-poor', text: '집중훈련' };
