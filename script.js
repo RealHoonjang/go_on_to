@@ -421,14 +421,14 @@ function calculateScorePercentile(eventName, score, genderFilter = '전체') {
     let lowerCount;
     
     if (isHigherBetter) {
-        // 높을수록 좋은 종목: 점수보다 낮은 값들의 개수
-        lowerCount = scores.filter(s => s < score).length;
+        // 높을수록 좋은 종목: 점수보다 낮거나 같은 값들의 개수 (자신 포함)
+        lowerCount = scores.filter(s => s <= score).length;
     } else {
-        // 낮을수록 좋은 종목: 점수보다 높은 값들의 개수
-        lowerCount = scores.filter(s => s > score).length;
+        // 낮을수록 좋은 종목: 점수보다 높거나 같은 값들의 개수 (자신 포함)
+        lowerCount = scores.filter(s => s >= score).length;
     }
     
-    // 백분위수 계산: 하위권 비율
+    // 백분위수 계산: 해당 점수 이하/이상의 비율
     const percentile = (lowerCount / scores.length) * 100;
     
     return percentile;
@@ -1112,6 +1112,9 @@ function displayAnalysisResult(data) {
     const eventName = eventDisplayNames[currentEvent];
     const genderText = data.gender === '남' ? '남학생' : '여학생';
     
+    // 백분위수는 "해당 값 이하/이상의 비율"이므로, 100에서 빼서 "상위 비율"로 표시
+    const upperPercent = 100 - percentile;
+    
     const html = `
         <div class="row">
             <div class="col-12 mb-4">
@@ -1123,12 +1126,12 @@ function displayAnalysisResult(data) {
             <div class="col-md-6">
                 <div class="result-card">
                     <h5>백분위수</h5>
-                    <div class="percentile-display ${grade.class}">${Math.round(100 - percentile)}%</div>
+                    <div class="percentile-display ${grade.class}">${upperPercent}%</div>
                     <p class="text-center">${grade.text}</p>
                     <div class="progress mb-2">
-                        <div class="progress-bar" style="width: ${100 - percentile}%"></div>
+                        <div class="progress-bar" style="width: ${upperPercent}%"></div>
                     </div>
-                    <small>전체 ${data.statistics.count}명 중 상위 ${Math.round(100 - percentile)}%위</small>
+                    <small>전체 ${data.statistics.count}명 중 상위 ${upperPercent}%</small>
                 </div>
             </div>
             <div class="col-md-6">
