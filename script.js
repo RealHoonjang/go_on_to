@@ -418,19 +418,21 @@ function calculateScorePercentile(eventName, score, genderFilter = '전체') {
     // 종목이 높을수록 좋은지, 낮을수록 좋은지 확인
     const isHigherBetter = higherIsBetterEvents.includes(eventName);
     
-    let lowerCount;
+    let betterCount;
     
     if (isHigherBetter) {
-        // 높을수록 좋은 종목: 점수보다 낮거나 같은 값들의 개수 (자신 포함)
-        lowerCount = scores.filter(s => s <= score).length;
+        // 높을수록 좋은 종목: 점수보다 높은 값들의 개수
+        betterCount = scores.filter(s => s > score).length;
     } else {
-        // 낮을수록 좋은 종목: 점수보다 높거나 같은 값들의 개수 (자신 포함)
-        lowerCount = scores.filter(s => s >= score).length;
+        // 낮을수록 좋은 종목: 점수보다 낮은 값들의 개수
+        betterCount = scores.filter(s => s < score).length;
     }
     
-    // 백분위수 계산: 해당 점수 이하/이상의 비율
-    const percentile = (lowerCount / scores.length) * 100;
+    // 백분위수 계산: 나보다 좋은(높은 또는 낮은) 점수의 비율
+    const percentile = (betterCount / scores.length) * 100;
     
+    // percentile이 클수록 더 많은 사람이 나보다 좋은 점수를 받았다는 의미
+    // 따라서 percentile이 "하위권 비율"을 나타냄
     return percentile;
 }
 
