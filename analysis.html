@@ -73,10 +73,6 @@
                         전국 7개 시도 체육 실기 데이터를 바탕으로 내 기록이 어느 정도 위치인지 확인하고,
                         체육계열 진로·진학 준비에 활용해 보세요.
                     </p>
-                    <div class="alert alert-hero-status mt-3" id="status-alert" role="status">
-                        <i class="fas fa-info-circle me-2"></i>
-                        종목 선택 후 개인 기록을 입력하면 전체 데이터에서의 위치를 확인할 수 있습니다.
-                    </div>
                 </div>
                 <div class="col-lg-6 hero-art-wrap">
                     <div class="hero-art" aria-hidden="true">
@@ -100,6 +96,7 @@
 
     <!-- 메인 컨테이너 -->
     <div class="container-fluid main-shell py-4">
+        <div id="analysis-status" class="analysis-status-banner d-none" role="status" aria-live="polite"></div>
         <!-- 대학·학과 입시 정보 (수시 / 정시) -->
         <div id="admission-info" class="row mb-5">
             <div class="col-12">
