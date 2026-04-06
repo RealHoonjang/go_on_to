@@ -5,17 +5,18 @@
 
     let admissionData = null;
 
+    /**
+     * 현재 페이지 URL 기준으로 data 파일 경로를 만듭니다.
+     * pathname으로 저장소 이름을 추출하는 방식은
+     * (예: 첫 경로가 analysis.html로 잡히는 로컬/일부 환경) 깃허브·로컬 모두에서 깨질 수 있어
+     * URL API만 사용합니다.
+     */
     function resolveDataPath(file) {
-        const hostname = window.location.hostname;
-        const pathname = window.location.pathname;
-        if (hostname.includes('github.io')) {
-            const pathParts = pathname.split('/').filter(function (p) {
-                return p;
-            });
-            const repoName = pathParts[0] || 'go_on_to';
-            return '/' + repoName + '/' + file;
+        try {
+            return new URL(file, window.location.href).href;
+        } catch (e) {
+            return file;
         }
-        return file;
     }
 
     function getElements() {
