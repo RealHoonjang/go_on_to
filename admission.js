@@ -60,7 +60,100 @@
         return div.innerHTML;
     }
 
-    function renderSingleType(block, label) {
+    function renderLegacyType(block, label) {
+        return (
+            '<div class="admission-type-block">' +
+            '<span class="admission-type-badge">' +
+            label +
+            '</span>' +
+            (block.headline
+                ? '<p class="admission-headline">' + escapeHtml(block.headline) + '</p>'
+                : '') +
+            renderFieldBlock('모집·정원 안내', block.quota) +
+            renderFieldBlock('전형·선발', block.selection) +
+            renderFieldBlock('실기·체육 관련', block.peExam) +
+            renderFieldBlock('참고', block.etc) +
+            '</div>'
+        );
+    }
+
+    function renderYearRow(y) {
+        return (
+            '<tr>' +
+            '<td data-label="모집(입학) 시기">' +
+            escapeHtml(y.label || '') +
+            '</td>' +
+            '<td data-label="학생부·교과">' +
+            escapeHtml(y.schoolRecord || '—') +
+            '</td>' +
+            '<td data-label="수능">' +
+            escapeHtml(y.csat || '—') +
+            '</td>' +
+            '<td data-label="실기">' +
+            escapeHtml(y.peExam || '—') +
+            '</td>' +
+            '<td data-label="모집·경쟁">' +
+            '<div class="admission-cell-stack">' +
+            (y.quota ? '<span class="admission-cell-line">' + escapeHtml(y.quota) + '</span>' : '') +
+            (y.competition
+                ? '<span class="admission-cell-line text-muted small">' + escapeHtml(y.competition) + '</span>'
+                : '') +
+            (y.etc
+                ? '<span class="admission-cell-line small">' + escapeHtml(y.etc) + '</span>'
+                : '') +
+            '</div>' +
+            '</td>' +
+            '</tr>'
+        );
+    }
+
+    function renderYearTable(block, label) {
+        const years = block.years;
+        if (!years || !years.length) {
+            return (
+                '<div class="admission-type-block admission-type-block--empty">' +
+                '<span class="admission-type-badge">' +
+                label +
+                '</span>' +
+                '<p class="mb-0 text-muted small">연도별 데이터가 없습니다.</p>' +
+                '</div>'
+            );
+        }
+
+        const rows = years.map(renderYearRow).join('');
+
+        return (
+            '<div class="admission-type-block">' +
+            '<span class="admission-type-badge">' +
+            label +
+            '</span>' +
+            (block.headline
+                ? '<p class="admission-headline">' + escapeHtml(block.headline) + '</p>'
+                : '') +
+            '<p class="admission-year-hint small text-muted mb-3">' +
+            '최근 3개 학년도 기준 요약입니다. <strong>학생부·교과</strong>, <strong>수능</strong>, <strong>실기</strong> 열을 함께 비교해 보세요. (가상 데이터)' +
+            '</p>' +
+            '<div class="table-responsive admission-table-wrap">' +
+            '<table class="table table-bordered admission-year-table">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">모집(입학) 시기</th>' +
+            '<th scope="col">학생부·교과</th>' +
+            '<th scope="col">수능</th>' +
+            '<th scope="col">실기</th>' +
+            '<th scope="col">모집·경쟁·비고</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            rows +
+            '</tbody>' +
+            '</table>' +
+            '</div>' +
+            '</div>'
+        );
+    }
+
+    function renderTypeBlock(block, label) {
         if (!block) {
             return (
                 '<div class="admission-type-block admission-type-block--empty">' +
@@ -71,20 +164,10 @@
                 '</div>'
             );
         }
-        return (
-            '<div class="admission-type-block">' +
-            '<span class="admission-type-badge">' +
-            label +
-            '</span>' +
-            '<p class="admission-headline">' +
-            escapeHtml(block.headline || '') +
-            '</p>' +
-            renderFieldBlock('모집·정원 안내', block.quota) +
-            renderFieldBlock('전형·선발', block.selection) +
-            renderFieldBlock('실기·체육 관련', block.peExam) +
-            renderFieldBlock('참고', block.etc) +
-            '</div>'
-        );
+        if (block.years && Array.isArray(block.years) && block.years.length > 0) {
+            return renderYearTable(block, label);
+        }
+        return renderLegacyType(block, label);
     }
 
     function getSelectedType() {
