@@ -205,16 +205,16 @@
             html +=
                 '<div class="row g-3">' +
                 '<div class="col-md-6">' +
-                renderSingleType(dept.susi, '수시') +
+                renderTypeBlock(dept.susi, '수시') +
                 '</div>' +
                 '<div class="col-md-6">' +
-                renderSingleType(dept.jeongsi, '정시') +
+                renderTypeBlock(dept.jeongsi, '정시') +
                 '</div>' +
                 '</div>';
         } else if (type === 'susi') {
-            html += renderSingleType(dept.susi, '수시');
+            html += renderTypeBlock(dept.susi, '수시');
         } else {
-            html += renderSingleType(dept.jeongsi, '정시');
+            html += renderTypeBlock(dept.jeongsi, '정시');
         }
 
         el.panel.innerHTML = html;
