@@ -1230,7 +1230,8 @@ function hideLoadingSpinner(containerId) {
 // 상태 업데이트
 function updateStatus(message, type = 'info') {
     const alert = document.getElementById('status-alert');
-    alert.className = `alert alert-${type}`;
+    if (!alert) return;
+    alert.className = `alert alert-hero-status mt-3 alert-${type}`;
     alert.innerHTML = `
         <i class="fas fa-info-circle me-2"></i>${message}
     `;
