@@ -482,6 +482,91 @@ body {
     color: var(--portal-text);
 }
 
+.analysis-status-banner {
+    border-radius: var(--portal-radius);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.analysis-status-banner.alert-success {
+    background: #e8f6ef;
+    color: #0d503c;
+}
+
+.analysis-status-banner.alert-info {
+    background: #e8f0ff;
+    color: var(--portal-navy);
+}
+
+.admission-year-hint {
+    line-height: 1.55;
+}
+
+.admission-table-wrap {
+    margin-top: 0.25rem;
+}
+
+.admission-year-table {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    --bs-table-border-color: #dee6f2;
+}
+
+.admission-year-table thead th {
+    background: #eef3fb;
+    color: var(--portal-navy);
+    font-weight: 800;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.admission-year-table td {
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.admission-cell-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.admission-cell-line {
+    display: block;
+}
+
+@media (max-width: 767.98px) {
+    .admission-year-table thead {
+        display: none;
+    }
+
+    .admission-year-table tbody tr {
+        display: block;
+        border: 1px solid #dee6f2;
+        border-radius: var(--portal-radius);
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        background: #fff;
+    }
+
+    .admission-year-table tbody td {
+        display: block;
+        border: none;
+        padding: 0.35rem 0.25rem;
+    }
+
+    .admission-year-table tbody td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: var(--portal-muted);
+        margin-bottom: 0.2rem;
+    }
+}
+
 .card-body {
     padding: 1.25rem;
 }
