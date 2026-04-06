@@ -121,26 +121,15 @@ function loadAllDataFiles() {
     files.forEach(file => {
         const region = file.split('/')[1].split('.')[0];
         
-        // GitHub Pages 호환 경로 처리
+        // 현재 문서 URL 기준 상대 경로 (로컬·GitHub Pages 공통, pathname 추출 불필요)
         let filePath;
-        const hostname = window.location.hostname;
-        const pathname = window.location.pathname;
-        
-        if (hostname.includes('github.io')) {
-            // GitHub Pages 환경
-            // URL이 realhoonjang.github.io/go_on_to/ 인 경우 저장소 이름은 'go_on_to'
-            const pathParts = pathname.split('/').filter(part => part);
-            const repoName = pathParts[0] || 'go_on_to';  // 기본값 설정
-            
-            filePath = `/${repoName}/${file}`;
-            console.log('GitHub Pages - Repo name:', repoName);
-            console.log('GitHub Pages - Loading:', filePath);
-        } else {
-            // 로컬 환경
+        try {
+            filePath = new URL(file, window.location.href).href;
+        } catch (e) {
             filePath = file;
-            console.log('Local file:', filePath);
         }
-        
+        console.log('Loading data:', filePath);
+
         fetch(filePath)
             .then(response => {
                 if (!response.ok) {
