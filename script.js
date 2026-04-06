@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // 앱 초기화
 function initializeApp() {
     console.log('체육 실기 분석 시스템 초기화');
-    updateStatus('데이터를 로드하는 중입니다...', 'info');
 }
 
 // 이벤트 리스너 설정
@@ -157,7 +156,7 @@ function loadAllDataFiles() {
                     if (hasErrors) {
                         updateStatus('일부 데이터 로드에 실패했습니다.', 'warning');
                     } else {
-                        updateStatus('데이터 로드 완료! 종목을 선택하세요.', 'success');
+                        clearAnalysisStatus();
                     }
                 }
             })
@@ -1227,12 +1226,25 @@ function hideLoadingSpinner(containerId) {
     // 이제 각 함수 내부에서 직접 처리합니다
 }
 
-// 상태 업데이트
+// 상태 배너 (히어로 영역 없음 — 본문 상단에만 표시)
+function clearAnalysisStatus() {
+    const el = document.getElementById('analysis-status');
+    if (!el) return;
+    el.className = 'analysis-status-banner d-none';
+    el.innerHTML = '';
+}
+
 function updateStatus(message, type = 'info') {
-    const alert = document.getElementById('status-alert');
-    if (!alert) return;
-    alert.className = `alert alert-hero-status mt-3 alert-${type}`;
-    alert.innerHTML = `
-        <i class="fas fa-info-circle me-2"></i>${message}
-    `;
+    const el = document.getElementById('analysis-status');
+    if (!el) return;
+    el.className = `analysis-status-banner alert alert-${type} mb-4`;
+    const icon =
+        type === 'success'
+            ? 'fa-check-circle'
+            : type === 'danger'
+              ? 'fa-exclamation-triangle'
+              : type === 'warning'
+                ? 'fa-exclamation-circle'
+                : 'fa-info-circle';
+    el.innerHTML = `<i class="fas ${icon} me-2"></i>${message}`;
 }
