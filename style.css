@@ -382,6 +382,106 @@ body {
     background: linear-gradient(90deg, #1e4a8a 0%, var(--portal-hero-blue-deep) 100%);
 }
 
+.portal-card-header--admission {
+    background: linear-gradient(90deg, #0d3558 0%, #1a5a9e 100%);
+}
+
+/* 입시 정보 (진학 상담) */
+.admission-disclaimer {
+    color: var(--portal-muted);
+    line-height: 1.65;
+    padding: 0.75rem 1rem;
+    background: #f0f5fc;
+    border-radius: var(--portal-radius);
+    border-left: 4px solid var(--portal-hero-blue);
+}
+
+.admission-type-toggle {
+    gap: 0.35rem;
+}
+
+.admission-type-toggle .btn-admission-type {
+    border-radius: 999px !important;
+    font-weight: 700;
+    color: var(--portal-navy);
+    border: 2px solid #c8d7ee;
+    background: #fff;
+    padding: 0.45rem 1.1rem;
+}
+
+.admission-type-toggle .btn-check:checked + .btn-admission-type {
+    background: var(--portal-navy);
+    border-color: var(--portal-navy);
+    color: #fff;
+}
+
+.admission-type-toggle .btn-admission-type:hover {
+    border-color: var(--portal-hero-blue);
+    color: var(--portal-navy);
+}
+
+.admission-detail-panel {
+    min-height: 120px;
+}
+
+.admission-type-block {
+    background: #fafbfd;
+    border: 1px solid #e4eaf3;
+    border-radius: var(--portal-radius-lg);
+    padding: 1.25rem 1.35rem;
+    height: 100%;
+}
+
+.admission-type-block--empty {
+    opacity: 0.95;
+}
+
+.admission-type-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: var(--portal-navy);
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+}
+
+.admission-type-block--empty .admission-type-badge {
+    background: #94a3b8;
+}
+
+.admission-headline {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--portal-navy);
+    margin-bottom: 1rem;
+}
+
+.admission-field {
+    margin-bottom: 1rem;
+}
+
+.admission-field:last-child {
+    margin-bottom: 0;
+}
+
+.admission-field-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--portal-muted);
+    margin-bottom: 0.25rem;
+}
+
+.admission-field-value {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--portal-text);
+}
+
 .card-body {
     padding: 1.25rem;
 }
