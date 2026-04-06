@@ -49,6 +49,7 @@
             </button>
             <nav class="collapse navbar-collapse main-nav-wrap" id="mainNav">
                 <ul class="main-nav">
+                    <li><a href="#admission-info">입시 정보</a></li>
                     <li><a href="#event-selector">종목 선택</a></li>
                     <li><a href="#data-distribution">데이터 분포</a></li>
                     <li><a href="#score-input">기록 입력</a></li>
@@ -99,6 +100,54 @@
 
     <!-- 메인 컨테이너 -->
     <div class="container-fluid main-shell py-4">
+        <!-- 대학·학과 입시 정보 (수시 / 정시) -->
+        <div id="admission-info" class="row mb-5">
+            <div class="col-12">
+                <div class="card portal-card shadow-sm">
+                    <div class="card-header portal-card-header portal-card-header--admission">
+                        <h3 class="mb-0"><i class="fas fa-university me-2"></i>대학·학과 입시 정보</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2">
+                            <p id="admission-year-label" class="small text-muted mb-0"></p>
+                        </div>
+                        <p id="admission-disclaimer" class="admission-disclaimer small mb-4"></p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="admission-university" class="form-label">대학</label>
+                                <select id="admission-university" class="form-select form-select-lg" aria-label="대학 선택">
+                                    <option value="">대학을 선택하세요</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="admission-department" class="form-label">학과</label>
+                                <select id="admission-department" class="form-select form-select-lg" aria-label="학과 선택" disabled>
+                                    <option value="">먼저 대학을 선택하세요</option>
+                                </select>
+                            </div>
+                        </div>
+                        <fieldset class="mb-4">
+                            <legend class="form-label mb-2">전형 구분</legend>
+                            <div class="admission-type-toggle btn-group flex-wrap" role="group" aria-label="수시 또는 정시 선택">
+                                <input type="radio" class="btn-check" name="admission-type" id="admission-type-all" value="all" checked autocomplete="off">
+                                <label class="btn btn-admission-type" for="admission-type-all">전체 (수시+정시)</label>
+                                <input type="radio" class="btn-check" name="admission-type" id="admission-type-susi" value="susi" autocomplete="off">
+                                <label class="btn btn-admission-type" for="admission-type-susi">수시</label>
+                                <input type="radio" class="btn-check" name="admission-type" id="admission-type-jeongsi" value="jeongsi" autocomplete="off">
+                                <label class="btn btn-admission-type" for="admission-type-jeongsi">정시</label>
+                            </div>
+                        </fieldset>
+                        <div id="admission-detail-panel" class="admission-detail-panel">
+                            <div class="admission-empty text-center text-muted py-4">
+                                <i class="fas fa-university fa-2x mb-3 d-block opacity-50"></i>
+                                <p class="mb-0">대학과 학과를 선택하면 입시 정보가 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 종목 선택 섹션 -->
         <div id="event-selector" class="row mb-5">
             <div class="col-12">
@@ -227,5 +276,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
+    <script src="admission.js"></script>
 </body>
 </html>
