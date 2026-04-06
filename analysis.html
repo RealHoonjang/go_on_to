@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진학 상담 | 체육 실기 성적 분석</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+    <!-- 상단 유틸 바 (학교체육포털 스타일) -->
+    <div class="utility-bar">
+        <div class="container-fluid utility-inner">
+            <nav class="utility-links" aria-label="관련 포털">
+                <a href="index.html" class="utility-link">진로진학 상담</a>
+                <span class="utility-sep" aria-hidden="true">|</span>
+                <a href="#" class="utility-link">학교체육포털</a>
+                <span class="utility-sep" aria-hidden="true">|</span>
+                <a href="#" class="utility-link">학교스포츠클럽포털</a>
+                <span class="utility-sep" aria-hidden="true">|</span>
+                <a href="#" class="utility-link">학교체육정보포털</a>
+            </nav>
+            <div class="utility-social">
+                <a href="#" class="social-dot" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-dot" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-dot" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-dot" aria-label="블로그"><i class="fas fa-blog"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메인 네비게이션 -->
+    <header class="main-header">
+        <div class="container-fluid main-header-inner">
+            <a class="brand-block" href="index.html">
+                <span class="brand-logo" aria-hidden="true">S</span>
+                <span class="brand-text">
+                    <span class="brand-title">체육 실기 분석</span>
+                    <span class="brand-sub">진학 상담 · 7개 시도 데이터</span>
+                </span>
+            </a>
+            <button class="navbar-toggler main-nav-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="메뉴 열기">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <nav class="collapse navbar-collapse main-nav-wrap" id="mainNav">
+                <ul class="main-nav">
+                    <li><a href="#event-selector">종목 선택</a></li>
+                    <li><a href="#data-distribution">데이터 분포</a></li>
+                    <li><a href="#score-input">기록 입력</a></li>
+                    <li><a href="#analysis-result">분석 결과</a></li>
+                </ul>
+                <div class="main-header-actions">
+                    <span class="header-hint d-none d-md-inline">체육계열 진학을 위한 분석 도구</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 히어로 -->
+    <section class="site-hero" aria-labelledby="hero-heading">
+        <div class="container-fluid hero-inner">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 hero-copy">
+                    <p class="hero-kicker">운동하는 일반학생, 공부하는 학생선수</p>
+                    <h1 id="hero-heading" class="hero-heading">체육 실기 성적 분석</h1>
+                    <p class="hero-desc">
+                        전국 7개 시도 체육 실기 데이터를 바탕으로 내 기록이 어느 정도 위치인지 확인하고,
+                        체육계열 진로·진학 준비에 활용해 보세요.
+                    </p>
+                    <div class="alert alert-hero-status mt-3" id="status-alert" role="status">
+                        <i class="fas fa-info-circle me-2"></i>
+                        종목 선택 후 개인 기록을 입력하면 전체 데이터에서의 위치를 확인할 수 있습니다.
+                    </div>
+                </div>
+                <div class="col-lg-6 hero-art-wrap">
+                    <div class="hero-art" aria-hidden="true">
+                        <div class="hero-cloud"></div>
+                        <svg class="hero-svg" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="200" cy="240" rx="160" ry="28" fill="rgba(255,255,255,0.35)"/>
+                            <circle cx="120" cy="160" r="36" fill="#fff" opacity="0.95"/>
+                            <circle cx="280" cy="150" r="32" fill="#fff" opacity="0.9"/>
+                            <path d="M80 120 Q200 40 320 120" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+                            <circle cx="200" cy="95" r="14" fill="#00224d"/>
+                            <rect x="175" y="175" width="50" height="8" rx="4" fill="#00224d" transform="rotate(-15 200 179)"/>
+                            <circle cx="95" cy="175" r="22" fill="#00a651"/>
+                            <circle cx="305" cy="178" r="20" fill="#00224d"/>
+                            <path d="M260 200 L295 165 L310 195 Z" fill="#00a651"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 메인 컨테이너 -->
+    <div class="container-fluid main-shell py-4">
+        <!-- 종목 선택 섹션 -->
+        <div id="event-selector" class="row mb-5">
+            <div class="col-12">
+                <div class="card portal-card shadow-sm">
+                    <div class="card-header portal-card-header">
+                        <h3 class="mb-0"><i class="fas fa-list me-2"></i>체육 실기 종목 선택</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label for="event-select" class="form-label">분석할 종목을 선택하세요</label>
+                                <select class="form-select form-select-lg" id="event-select">
+                                    <option value="">종목을 선택하세요</option>
+                                    <option value="standing_long_jump">제자리멀리뛰기</option>
+                                    <option value="vertical_jump">서전트점프</option>
+                                    <option value="grip_strength">배근력</option>
+                                    <option value="sit_up">윗몸일으키기</option>
+                                    <option value="front_bend">앉아윗몸앞으로굽히기</option>
+                                    <option value="10m_dash">10m 달리기</option>
+                                    <option value="20m_dash">20m 달리기</option>
+                                    <option value="long_run">오래달리기</option>
+                                    <option value="medicine_ball_throw">메디신볼던지기</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="gender-filter" class="form-label">성별 필터</label>
+                                <select class="form-select form-select-lg" id="gender-filter">
+                                    <option value="전체">전체</option>
+                                    <option value="남">남학생</option>
+                                    <option value="여">여학생</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-portal-primary btn-lg w-100" id="load-event-data">
+                                    <i class="fas fa-chart-bar me-2"></i>기록 분포 확인
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 데이터 분포 시각화 섹션 -->
+        <div id="data-distribution" class="row mb-5" style="display: none;">
+            <div class="col-12">
+                <div class="card portal-card shadow-sm">
+                    <div class="card-header portal-card-header portal-card-header--accent">
+                        <h3 class="mb-0"><i class="fas fa-chart-pie me-2"></i>데이터 분포</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="chart-wrap">
+                                    <canvas id="distributionChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="statistics-info"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 기록 입력 섹션 -->
+        <div id="score-input" class="row mb-5">
+            <div class="col-12">
+                <div class="card portal-card shadow-sm">
+                    <div class="card-header portal-card-header">
+                        <h3 class="mb-0"><i class="fas fa-edit me-2"></i>개인 기록 입력</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="student-gender" class="form-label">성별 선택</label>
+                                <select class="form-select form-select-lg" id="student-gender">
+                                    <option value="">성별을 선택하세요</option>
+                                    <option value="남">남</option>
+                                    <option value="여">여</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="personal-score" class="form-label">개인 기록 입력</label>
+                                <div class="input-group input-group-lg">
+                                    <input type="number" class="form-control" id="personal-score"
+                                           step="0.01" placeholder="기록을 입력하세요">
+                                    <span class="input-group-text" id="unit-display">단위</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-portal-secondary btn-lg w-100" id="analyze-score">
+                                    <i class="fas fa-search me-2"></i>내 위치 확인
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 분석 결과 섹션 -->
+        <div id="analysis-result" class="row mb-5">
+            <div class="col-12">
+                <div class="card portal-card shadow-sm">
+                    <div class="card-header portal-card-header portal-card-header--accent">
+                        <h3 class="mb-0"><i class="fas fa-trophy me-2"></i>분석 결과</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="result-content" class="text-center text-muted result-placeholder">
+                            <i class="fas fa-chart-line fa-3x mb-3"></i>
+                            <p>종목을 선택하고 기록을 입력한 후 '내 위치 확인' 버튼을 클릭하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container-fluid text-center">
+            <p class="mb-0">&copy; 2026 체육 실기 성적 분석 · 진로진학 상담 연계 서비스</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
